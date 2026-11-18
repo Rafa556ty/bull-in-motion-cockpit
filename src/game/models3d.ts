@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { normalizeCar } from "./normalize-car";
-import { isolateActiveWing } from "./active-wing";
+import { isolateRevuelto2024Wing } from "./active-wing";
 import { blackOutBmwWindow } from "./bmw-windows";
 import { clearChironSsGlass, clearTnrGlass, makeGlassClear } from "./glass";
 import { fixSvj } from "./svj-fix";
@@ -932,8 +932,8 @@ export function loadCar(key: ModelKey): Promise<THREE.Group> {
           (o) => isSteeringPart(key, `${o.name}|${o.parent?.name ?? ""}`, (o.material as THREE.Material).name || ""),
         );
         if (key === "revuelto") {
-          isolateActiveWing(result);
           cutRevueltoSteeringWheel(result);
+          isolateRevuelto2024Wing(result);
         }
         cutBakedSteeringWheel(result, key);
         // The SVJ file ships its front wheels pre-steered; multi-part wheels share one hub.

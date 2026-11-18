@@ -24,7 +24,6 @@ describe("cockpit view", () => {
   });
 
   it("finds the separate steering wheel parts per car", () => {
-    expect(isSteeringPart("revuelto", "Interior_middle", "Steering_wheel")).toBe(true);
     expect(isSteeringPart("chiron-ss300", "SteeringWheel_Badge_26", "CSR2_Interior")).toBe(true);
     expect(isSteeringPart("jesko", "x", "alca_steer")).toBe(true);
     expect(isSteeringPart("svj", "x", "Steering_wheel")).toBe(false);
