@@ -1019,7 +1019,6 @@ export class Scene3D {
     brakeMesh.name = "engine-cowl-brake-strip";
     brakeMesh.visible = false;
     // The engine-cowl strip is shaped for the Revuelto only.
-    if (this.playerKey === "revuelto") { car.add(brakeMesh); this.engineBrakeLight = brakeMesh; }
     {
       const box = new THREE.Box3().setFromObject(car);
       const ws = findWindscreen(car, box);
@@ -1113,7 +1112,6 @@ export class Scene3D {
         halo(x, 0.56, -2.47, "head", 0.56);
       }
     }
-    if (this.playerKey === "revuelto") halo(0, 0.98, 1.67, "brake", 0.65);
 
     // High-visibility dual headlight beam projector onto the highway tarmac
     const beamTex = canvasTex(512, 1024, (g) => {
@@ -1565,7 +1563,7 @@ export class Scene3D {
         this.canvas.dataset["tail"] = this.playerTail
           .map((m) => `${m.name}:${m.emissive.getHexString()}:${m.emissiveIntensity}:${m.toneMapped}`)
           .join("|") + `|brake=${isBraking}|lights=${lights}`;
-      if (this.playerKey === "revuelto" || this.playerKey === "chiron") {
+      if (this.playerKey === "chiron") {
         for (const m of this.playerTail) m.emissiveIntensity = isBraking ? 2.6 : lights ? 1.5 : 0.2;
         for (const m of this.playerHead) m.emissiveIntensity = lights ? 3.8 : 0.6;
       } else {
