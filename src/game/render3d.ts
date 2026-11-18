@@ -25,6 +25,7 @@ import type { PlayerCar } from "./player-cars";
 import { lampRole, lampLevels, DARK_BY_DAY, type LampRole } from "./player-lights";
 import { FOOTPRINTS, TRAFFIC_DRAW_AHEAD } from "./traffic-rules";
 import { CAMERA_POSES, nextCameraView, type CameraView } from "./camera-views";
+import { RevueltoDash } from "./revuelto-dash";
 import { COCKPIT_FOV, COCKPIT_SEATS, hasCockpit, steeringWheelAngle } from "./cockpit";
 import {
   stepAero,
@@ -292,7 +293,10 @@ export class Scene3D {
     this.engineBrakeLight = null; this.wing = undefined; this.chironRig = null;
     this.steeringWheel = null; this.cabinOnly = [];
     this.playerKey = key;
-    this.setupPlayer(template.clone(true));
+    const car = template.clone(true);
+    this.revDash = null;
+    if (key === "revuelto") { this.revDash = new RevueltoDash(); car.add(this.revDash.group); }
+    this.setupPlayer(car);
     this.refreshCarCustom();
     this.canvas.dataset["playerCar"] = key;
   }
@@ -383,6 +387,7 @@ export class Scene3D {
   private player: THREE.Group | null = null;
   private wing: THREE.Object3D | undefined;
   private steeringWheel: THREE.Object3D | null = null;
+  private revDash: RevueltoDash | null = null;
   private cabinOnly: THREE.Object3D[] = [];
   private eyeVector = new THREE.Vector3();
   private lookVector = new THREE.Vector3();
@@ -1526,6 +1531,7 @@ export class Scene3D {
         const axis = this.steeringWheel.userData["axis"] as THREE.Vector3;
         this.steeringWheel.quaternion.setFromAxisAngle(axis, -steeringWheelAngle(s.steer ?? 0));
       }
+      this.revDash?.update(s.player.speed, s.gas, dt);
       if (import.meta.env.DEV && this.playerWheels.length) {
         this.canvas.dataset["wheelRot"] = this.playerWheels[0]!.mesh.rotation.x.toFixed(3);
         this.canvas.dataset["wheelCount"] = String(this.playerWheels.length);
